@@ -1,9 +1,44 @@
 #include <iostream>
-#include <cmath>
 #include <random>
-#include <climits>
 
 using namespace std;
+
+int array_type();
+void draw_init_matrix(double **array, double size);
+void draw_final_matrix(int **array, double size);
+void inputOutOfRange_error();
+void input_error();
+double digit_input();
+int get_array_size();
+double** generate_random_array();
+double** get_array();
+int** form_result_array(double **array);
+void delete_int_array(int **array, int size);
+void delete_d_array(double **array, double size);
+
+int main()
+{
+	double **array;
+	int **resultArray;
+
+	cout << "Do you want to enter the array Manually or use a Random one?" << endl;
+
+	if (array_type() == 1) {
+		array = get_array();
+	} else array = generate_random_array();
+
+	resultArray = form_result_array(array);
+
+	cout << endl << "Initial matrix:" << endl << endl;
+	draw_init_matrix(array, array[0][0]);
+	cout << endl << "Result matrix:" << endl << endl;
+	draw_final_matrix(resultArray, array[0][0]);
+
+	delete_int_array(resultArray, array[0][0]); //!Вроде должно работать, но не знаю как проверить
+	delete_d_array(array, array[0][0]);
+
+	return (0);
+}
 
 int array_type()
 {
@@ -27,7 +62,7 @@ int array_type()
 
 void draw_init_matrix(double **array, double size)
 {
-	for (int i = 1; i <= size; i++) {
+	for (int i = 1; i <= size; i++) {        //начинаем с 1 и до <= так как реальный размер массива больше на 1.
 		for (int j = 1; j <= size; j++) {
 			cout << array[i][j] << " ";
 		}
@@ -52,7 +87,7 @@ void inputOutOfRange_error()
 	cin.ignore(1000, '\n');
 }
 
-void input_error(void)
+void input_error()
 {
 	cout << "Input data type error. Try again." << endl;
 	cin.clear();
@@ -62,6 +97,7 @@ void input_error(void)
 double digit_input()
 {
 	double digit;
+
 	while(1) {
 		string str;
 		size_t pos{};
@@ -91,7 +127,7 @@ int get_array_size()
 	double input;
 
 	while(1) {
-		cout << "Enter array size (from 1 to 20): ";
+		cout << "Enter array size (from 1 to 20): "; //Лучше не испрользовать больше 5, иначе ввод может сильно затянуться. Краш происдодит на +-40 размерности.
 		input = digit_input();
 
 		if (input - round(input) == 0) {
@@ -126,11 +162,11 @@ double** get_array()
 	return (userArray);
 }
 
-double** get_random_array()
+double** generate_random_array()
 {
 	int arraySize = get_array_size();
-	double lower = -30;
-	double higher = 30;
+	double lower = -30;                       //!Можно настроить
+	double higher = 30;                       //!Можно настроить
 	double **randomArray;
 
 	mt19937 gen(time(0)); //Вихрь Мерсенна с сидом на текущее время
@@ -153,7 +189,7 @@ double** get_random_array()
 	return (randomArray);
 }
 
-int** get_result_array(double **array)
+int** form_result_array(double **array)
 {
 	int size = array[0][0];
 	int **resultArray;
@@ -176,45 +212,18 @@ int** get_result_array(double **array)
 	return (resultArray);
 }
 
-int main()
+void delete_int_array(int **array, int size)
+{	
+	for(int i = 0; i < size; i++) {
+		delete[] array[i];
+	}
+	delete[] array;
+}
+
+void delete_d_array(double **array, double size)
 {
-	double **array;
-	int **resultArray;
-
-	cout << "Do you want to enter the array Manually or use a Random one?" << endl;
-
-	if (array_type() == 1) {
-		array = get_array();
-	} else array = get_random_array();
-
-/*
-	cout << endl;
-
-	for (int i = 1; i <= array[0][0]; i++) {
-		for (int j = 1; j <= array[0][0]; j++) {
-			cout << array[i][j] << " ";
-		}
-		cout << endl;
+	for(int i = 0; i < size; i++) {
+		delete[] array[i];
 	}
-*/
-
-	resultArray = get_result_array(array); //TODO: Оформить красивывй вывод. Перепроверить работу проверок.
-	
-/*
-	cout << endl;
-
-	for (int i = 0; i < array[0][0]; i++) {
-		for (int j = 0; j < array[0][0]; j++) {
-			cout << resultArray[i][j] << " ";
-		}
-		cout << endl;
-	}
-*/
-
-	cout << endl << "Initial matrix:" << endl << endl;
-	draw_init_matrix(array, array[0][0]);
-	cout << endl << "Result matrix:" << endl << endl;
-	draw_final_matrix(resultArray, array[0][0]);
-
-	return (0);
+	delete[] array;
 }
