@@ -10,6 +10,8 @@ int array_type()
 	string str;
 
 	while(1){
+		cout << "Please choose - M/(r): ";
+		cin >> str;
 
 		while (str.size() != 1) {
 			cout << "Please choose - M/(r): ";
@@ -20,6 +22,26 @@ int array_type()
 			return (1);
 		if (str[0] == 'r' || str[0] == 'R')
 			return (0);
+	}
+}
+
+void draw_init_matrix(double **array, double size)
+{
+	for (int i = 1; i <= size; i++) {
+		for (int j = 1; j <= size; j++) {
+			cout << array[i][j] << " ";
+		}
+		cout << endl;
+	}
+}
+
+void draw_final_matrix(int **array, double size)
+{
+	for (int i = 0; i < size; i++) {
+		for (int j = 0; j < size; j++) {
+			cout << array[i][j] << " ";
+		}
+		cout << endl;
 	}
 }
 
@@ -69,7 +91,7 @@ int get_array_size()
 	double input;
 
 	while(1) {
-		cout << "Enter array size: ";
+		cout << "Enter array size (from 1 to 20): ";
 		input = digit_input();
 
 		if (input - round(input) == 0) {
@@ -165,6 +187,7 @@ int main()
 		array = get_array();
 	} else array = get_random_array();
 
+/*
 	cout << endl;
 
 	for (int i = 1; i <= array[0][0]; i++) {
@@ -173,9 +196,11 @@ int main()
 		}
 		cout << endl;
 	}
+*/
 
 	resultArray = get_result_array(array); //TODO: Оформить красивывй вывод. Перепроверить работу проверок.
-
+	
+/*
 	cout << endl;
 
 	for (int i = 0; i < array[0][0]; i++) {
@@ -184,6 +209,12 @@ int main()
 		}
 		cout << endl;
 	}
+*/
+
+	cout << endl << "Initial matrix:" << endl << endl;
+	draw_init_matrix(array, array[0][0]);
+	cout << endl << "Result matrix:" << endl << endl;
+	draw_final_matrix(resultArray, array[0][0]);
 
 	return (0);
 }
